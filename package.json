@@ -1,0 +1,14 @@
+{
+  "name": "jpeg-turbo-scaler",
+  "version": "1.0.0",
+  "description": "Extremely fast JPEG scaling module based on libjpeg-turbo",
+  "main": "jpeg-turbo-scaler.node",
+  "scripts": {
+    "test": "echo \"There are no tests.\" && exit 0",
+    "install": "node-gyp rebuild"
+  },
+  "author": "Roman Bovsunivskyi <a2k0001@gmail.com>",
+  "license": "ISC",
+  "gypfile": true
+}
+
