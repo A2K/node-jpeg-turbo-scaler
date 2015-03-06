@@ -2,6 +2,10 @@
   "name": "jpeg-turbo-scaler",
   "version": "1.0.0",
   "description": "Extremely fast JPEG scaling module based on libjpeg-turbo",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/A2K/node-jpeg-turbo-scaler.git"
+  },
   "main": "jpeg-turbo-scaler.node",
   "scripts": {
     "test": "echo \"There are no tests.\" && exit 0",
