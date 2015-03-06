@@ -1,6 +1,6 @@
 {
   "name": "jpeg-turbo-scaler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Extremely fast JPEG scaling module based on libjpeg-turbo",
   "repository": {
     "type": "git",
