@@ -15,8 +15,6 @@
 #include <cstdlib>
 #include <setjmp.h>
 
-//#include "bicubic.cc"
-
 void scale(void* img, size_t width, size_t height, void* output, size_t newWidth, size_t newHeight);
 
 using namespace v8;
@@ -330,9 +328,8 @@ void scaleFunction(const FunctionCallbackInfo<Value>& args)
   //ssize_t compress(void* data, size_t width, size_t height, int quality, void** output)
   void* jpegData = NULL;
   size_t jpegSize;
-  printf("------------------BEFORE COMPRESS-------------------\n");
+
   ResultCode compressStatus = compress(buffer, targetWidth, targetHeight, 80, &jpegData, jpegSize);
-  printf("------------------AFTER  COMPRESS-------------------\n");
 
   free(buffer);
 
