@@ -23,7 +23,6 @@ npm install jpeg-turbo-scaler
 *function* **decompress**(`path`, `targetWidth`, `targetHeight`, `callback`)
 
 Reads a JPEG file referenced by `path` from local file system and resizes it to fit into `targetWidth`x`targetHeight` box keeping original aspect ratio.
-arguments:
 
 `path`:  a string containing JPEG image file path (absolute or relative).
 
@@ -34,7 +33,6 @@ arguments:
 *function* **scale**(`path`, `targetWidth`, `targetHeight`, `callback`)
 
 Reads a JPEG file referenced by `path` from local file system, resizes it to fit into `targetWidth`x`targetHeight` box keeping original aspect ratio, and compresses the result to JPEG.
-arguments:
 
 `path`:  a string containing JPEG image file path (absolute or relative).
 
