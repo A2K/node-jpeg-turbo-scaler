@@ -85,9 +85,9 @@ static void set_scale(struct jpeg_decompress_struct* cinfo, size_t width, size_t
 
 
 #define CINFO_HAS_ERROR (cinfo.err->error_exit != jpeg_error_handler)
-#define DECOMPRESS_ERROR_CHECKPOINT if CINFO_HAS_ERROR { jpeg_destroy_decompress(&cinfo); fprintf(stderr, "decompression failed"); return -1; }
+#define DECOMPRESS_ERROR_CHECKPOINT if CINFO_HAS_ERROR { jpeg_destroy_decompress(&cinfo); fprintf(stderr, "decompression failed"); return ERROR; }
 
-ssize_t decode(void* data, size_t size, void** output, size_t* outputWidth, size_t* outputHeight)
+ResultCode decompress(void* data, size_t size, void** output, size_t& outputWidth, size_t& outputHeight, size_t& outputSize)
 {
   struct jpeg_error_mgr mgr;
   jpeg_std_error(&mgr);
@@ -105,19 +105,19 @@ ssize_t decode(void* data, size_t size, void** output, size_t* outputWidth, size
   {
     fprintf(stderr, "Failed to read JPEG header");
     jpeg_destroy_decompress(&cinfo);
-    return -1;
+    return ERROR;
   }
 
   jpeg_calc_output_dimensions(&cinfo);
 
-  set_scale(&cinfo, cinfo.output_width, cinfo.output_height, *outputWidth, *outputHeight);
+  set_scale(&cinfo, cinfo.output_width, cinfo.output_height, outputWidth, outputHeight);
 
-  *outputWidth = cinfo.output_width;
-  *outputHeight = cinfo.output_height;
+  outputWidth = cinfo.output_width;
+  outputHeight = cinfo.output_height;
   cinfo.output_components = 4;
   cinfo.out_color_space = JCS_EXT_RGBA;
 
-  size_t outputSize = cinfo.output_width * cinfo.output_height * cinfo.output_components;
+  outputSize = cinfo.output_width * cinfo.output_height * cinfo.output_components;
 
   jpeg_start_decompress(&cinfo);
 
@@ -147,16 +147,14 @@ ssize_t decode(void* data, size_t size, void** output, size_t* outputWidth, size
 
   jpeg_destroy_decompress(&cinfo);
 
-  return outputSize;
+  return OK;
 }
 
 ResultCode compress(void* data, size_t width, size_t height, int quality, void** output, size_t& outputSize)
 {
-  const int COLOR_COMPONENTS = 3;
-
   tjhandle compressor = tjInitCompress();
 
-  *output = NULL;// malloc(width * height * 3);
+  *output = NULL;
 
   int compressStatus = tjCompress2(compressor, (uint8_t*)data, width, 0, height, TJPF_RGBA,
                                    (uint8_t**)output, &outputSize, TJSAMP_444, quality, TJFLAG_FASTDCT);
@@ -207,10 +205,11 @@ ResultCode decompressAndScale(const char* filepath, void** buffer, size_t& size,
   {
     size_t originalSize;
     bool gotFile = readFile(filepath, buffer, &originalSize);
+    ResultCode result;
 
     if (gotFile)
     {
-      size = decode(*buffer, originalSize, &decompressed, &width, &height);
+       result = decompress(*buffer, originalSize, &decompressed, width, height, size);
     }
 
     if (*buffer != NULL)
@@ -218,7 +217,7 @@ ResultCode decompressAndScale(const char* filepath, void** buffer, size_t& size,
       free(*buffer);
     }
 
-    if (!gotFile || size == -1)
+    if (!gotFile || OK != result)
     {
       if (decompressed != NULL)
       {
