@@ -5,7 +5,7 @@
       "sources": [ "jpeg.cc", "scaling.cc" ],
       "include_dirs": [ "/usr/local/opt/jpeg-turbo/include" ],
       "link_settings": {
-        "libraries": [ "-L/usr/local/Cellar/jpeg-turbo/1.4.0/lib", "-lturbojpeg" ]
+        "libraries": [ "-L/usr/local/opt/jpeg-turbo/lib", "-lturbojpeg" ]
       },
 
   },
